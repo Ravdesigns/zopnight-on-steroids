@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZopNight — Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-page: #161619;
+  --bg-surface: #222226;
+  --bg-surface-hover: #2a2a2e;
+  --bg-elevated: #2a2a2e;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(255,255,255,0.12);
+  --border-focus: rgba(255,255,255,0.20);
+  --text-primary: rgba(255,255,255,0.88);
+  --text-secondary: rgba(255,255,255,0.55);
+  --text-tertiary: rgba(255,255,255,0.28);
+  --accent: #0891b2;
+  --accent-hover: #06b6d4;
+  --accent-bg: rgba(8,145,178,0.12);
+  --accent-border: rgba(8,145,178,0.22);
+  --success: #34d399;
+  --success-bg: rgba(52,211,153,0.10);
+  --error: #f87171;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-pill: 99px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; }
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-page);
+  color: var(--text-primary);
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SPLIT LAYOUT
+   ═══════════════════════════════════════════════════════════ */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100vh;
+}
+
+/* ── Left branded panel ── */
+.panel-left {
+  position: relative;
+  background: var(--bg-page);
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 48px;
+  overflow: hidden;
+}
+
+/* Ambient glow */
+.panel-left::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 500px 400px at 30% 60%, rgba(8,145,178,0.10) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 70% 30%, rgba(8,145,178,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Subtle grid pattern */
+.panel-left::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  mask-image: radial-gradient(ellipse at 50% 70%, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 70%, black 30%, transparent 70%);
+}
+
+.panel-left-content {
+  position: relative; z-index: 1;
+}
+
+/* Logo in top-left of branded panel */
+.brand-logo {
+  position: absolute; top: 48px; left: 48px; z-index: 1;
+  display: flex; align-items: center; gap: 10px;
+}
+.brand-logo-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  background: var(--accent); display: flex; align-items: center; justify-content: center;
+}
+.brand-logo-icon svg { width: 20px; height: 20px; }
+.brand-logo-text { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+.brand-logo-text span { color: var(--accent); }
+
+/* Tagline */
+.brand-tagline {
+  font-size: 32px; font-weight: 600; line-height: 1.25;
+  letter-spacing: -0.5px; margin-bottom: 16px;
+}
+.brand-tagline .highlight { color: var(--accent); }
+.brand-desc {
+  font-size: 15px; color: var(--text-secondary); line-height: 1.6;
+  max-width: 380px;
+}
+
+/* Trust badges */
+.brand-trust {
+  display: flex; align-items: center; gap: 24px;
+  margin-top: 40px; padding-top: 32px;
+  border-top: 0.5px solid var(--border);
+}
+.trust-item {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.trust-val { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+.trust-lbl { font-size: 11px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Floating testimonial card */
+.brand-quote {
+  position: absolute; top: 50%; left: 48px; right: 48px;
+  transform: translateY(-50%);
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  z-index: 1;
+}
+.brand-quote p {
+  font-size: 14px; line-height: 1.65; color: var(--text-secondary);
+  font-style: italic;
+}
+.brand-quote-author {
+  display: flex; align-items: center; gap: 12px; margin-top: 16px;
+}
+.brand-quote-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, #06b6d4 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600; color: #fff;
+}
+.brand-quote-name { font-size: 13px; font-weight: 500; }
+.brand-quote-role { font-size: 12px; color: var(--text-tertiary); }
+
+/* Footer on left panel */
+.panel-left-footer {
+  position: absolute; bottom: 32px; left: 48px;
+  font-size: 12px; color: var(--text-tertiary);
+}
+
+/* ── Right form panel ── */
+.panel-right {
+  position: relative;
+  background: #1a1a1e;
+  display: flex; flex-direction: column;
+  border-left: 0.5px solid var(--border);
+}
+
+/* Top bar with sign-in link */
+.panel-right-top {
+  display: flex; justify-content: flex-end; align-items: center;
+  padding: 20px 40px;
+  font-size: 13px; color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+.panel-right-top a {
+  color: var(--accent); text-decoration: none; margin-left: 4px;
+}
+.panel-right-top a:hover { text-decoration: underline; }
+
+/* Form area */
+.panel-right-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 0 40px 40px;
+  overflow-y: auto;
+}
+
+/* Progress bar */
+.progress-bar {
+  position: absolute; top: 0; left: 0; height: 2px; z-index: 100;
+  background: var(--accent);
+  transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ── Step container ── */
+.step-viewport {
+  width: 100%; max-width: 420px; position: relative;
+}
+.step {
+  position: absolute; top: 0; left: 0; width: 100%;
+  opacity: 0; transform: translateX(40px);
+  transition: opacity 0.4s cubic-bezier(0.22,1,0.36,1), transform 0.4s cubic-bezier(0.22,1,0.36,1);
+  pointer-events: none; visibility: hidden;
+}
+.step.active {
+  position: relative; opacity: 1; transform: translateX(0);
+  pointer-events: auto; visibility: visible;
+}
+
+/* ── Step header ── */
+.step h1 {
+  font-size: 22px; font-weight: 600; letter-spacing: -0.4px;
+  margin-bottom: 6px;
+}
+.step .subtitle {
+  font-size: 14px; color: var(--text-secondary); line-height: 1.5;
+  margin-bottom: 28px;
+}
+
+/* Step indicator dots */
+.step-dots {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 32px;
+}
+.step-dot {
+  width: 24px; height: 3px; border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s, width 0.3s;
+}
+.step-dot.active { background: var(--accent); width: 32px; }
+.step-dot.done { background: var(--accent); }
+
+/* ── Form elements ── */
+.field { margin-bottom: 18px; }
+.field label {
+  display: block; font-size: 13px; font-weight: 500;
+  color: var(--text-secondary); margin-bottom: 6px;
+}
+.field input, .field select {
+  width: 100%; height: 42px; padding: 0 14px;
+  background: var(--bg-page); border: 0.5px solid var(--border);
+  border-radius: var(--radius-md); color: var(--text-primary);
+  font-family: var(--font-sans); font-size: 14px;
+  outline: none; transition: border-color 0.15s;
+}
+.field input::placeholder { color: var(--text-tertiary); }
+.field input:focus, .field select:focus { border-color: var(--accent); }
+.field select {
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+}
+.field select option { background: var(--bg-surface); color: var(--text-primary); }
+
+/* ── Chips ── */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  padding: 8px 16px; border-radius: var(--radius-pill);
+  background: var(--bg-page); border: 0.5px solid var(--border);
+  font-size: 13px; color: var(--text-secondary); cursor: pointer;
+  transition: all 0.15s; user-select: none;
+}
+.chip:hover { border-color: var(--border-hover); color: var(--text-primary); }
+.chip.selected {
+  border-color: var(--accent); color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  width: 100%; height: 42px; border: none; border-radius: var(--radius-md);
+  background: var(--accent); color: #fff; font-family: var(--font-sans);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  margin-top: 8px;
+}
+.btn-primary:hover { background: var(--accent-hover); }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-ghost {
+  background: none; border: none; color: var(--text-secondary);
+  font-family: var(--font-sans); font-size: 13px; cursor: pointer;
+  padding: 8px 0; transition: color 0.15s;
+}
+.btn-ghost:hover { color: var(--text-primary); }
+
+.back-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: none; border: none; color: var(--text-tertiary);
+  font-family: var(--font-sans); font-size: 13px; cursor: pointer;
+  margin-top: 20px; padding: 0; transition: color 0.15s;
+}
+.back-link:hover { color: var(--text-secondary); }
+.back-link svg { width: 14px; height: 14px; }
+
+/* ── Divider ── */
+.or-divider {
+  display: flex; align-items: center; gap: 16px;
+  margin: 20px 0;
+  font-size: 12px; color: var(--text-tertiary);
+}
+.or-divider::before, .or-divider::after {
+  content: ''; flex: 1; height: 0.5px; background: var(--border);
+}
+
+/* SSO buttons */
+.sso-btn {
+  width: 100%; height: 42px; border: 0.5px solid var(--border);
+  border-radius: var(--radius-md); background: transparent;
+  color: var(--text-primary); font-family: var(--font-sans);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: background 0.15s, border-color 0.15s;
+  margin-bottom: 10px;
+}
+.sso-btn:hover { background: var(--bg-surface-hover); border-color: var(--border-hover); }
+.sso-btn:active { transform: scale(0.98); }
+.sso-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* ── Provider cards (Step 3) ── */
+.providers { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.provider-card {
+  background: var(--bg-page); border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 18px 12px;
+  text-align: center; cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.22,1,0.36,1);
+}
+.provider-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+.provider-card.selected { border-color: var(--accent); background: var(--accent-bg); }
+.provider-card svg { width: 32px; height: 32px; margin-bottom: 6px; }
+.provider-card .pname { font-size: 12px; font-weight: 500; }
+
+.provider-form {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.4s cubic-bezier(0.22,1,0.36,1), opacity 0.3s, margin 0.3s;
+  margin-top: 0;
+}
+.provider-form.open { max-height: 300px; opacity: 1; margin-top: 14px; }
+.provider-form .inner-card {
+  background: var(--bg-surface); border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 18px 20px;
+}
+.provider-form .btn-cf {
+  width: 100%; height: 38px; border: 0.5px solid var(--accent-border);
+  border-radius: var(--radius-md); background: var(--accent-bg);
+  color: var(--accent); font-family: var(--font-sans); font-size: 13px;
+  font-weight: 500; cursor: pointer; margin-top: 4px;
+  transition: background 0.15s;
+}
+.provider-form .btn-cf:hover { background: rgba(8,145,178,0.18); }
+
+.upload-area {
+  width: 100%; height: 52px; border: 1px dashed var(--border-hover);
+  border-radius: var(--radius-md); display: flex; align-items: center;
+  justify-content: center; gap: 8px; color: var(--text-tertiary);
+  font-size: 12px; cursor: pointer; transition: border-color 0.15s;
+}
+.upload-area:hover { border-color: var(--accent); color: var(--text-secondary); }
+.upload-area svg { width: 14px; height: 14px; }
+
+/* ── Sync step (Step 4) ── */
+.sync-center { text-align: center; padding: 32px 0; }
+.sync-counter {
+  font-size: 48px; font-weight: 700; letter-spacing: -2px;
+  color: var(--accent); margin: 12px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+.sync-label { font-size: 14px; color: var(--text-secondary); }
+.sync-subtitle { font-size: 13px; color: var(--text-tertiary); margin-top: 20px; }
+
+.service-grid {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  margin-top: 24px;
+}
+.svc-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: var(--radius-pill);
+  background: var(--bg-elevated); border: 0.5px solid var(--border);
+  font-size: 11px; font-weight: 500; color: var(--text-secondary);
+  opacity: 0; transform: scale(0.7);
+  transition: opacity 0.35s cubic-bezier(0.34,1.56,0.64,1), transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+.svc-chip.visible { opacity: 1; transform: scale(1); }
+.svc-chip .dot { width: 5px; height: 5px; border-radius: 50%; }
+
+.sync-spinner {
+  width: 40px; height: 40px; border-radius: 50%; margin: 0 auto;
+  border: 2.5px solid var(--border); border-top-color: var(--accent);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Ready step (Step 5) ── */
+.ready-center { text-align: center; }
+.ready-check {
+  width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 16px;
+  background: var(--success-bg); display: flex; align-items: center; justify-content: center;
+}
+.ready-check svg { width: 28px; height: 28px; color: var(--success); }
+
+.stat-cards {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+  margin: 24px 0 8px;
+}
+.stat-card {
+  background: var(--bg-page); border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 14px 10px; text-align: center;
+}
+.stat-card .stat-val {
+  font-size: 20px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 2px;
+}
+.stat-card .stat-lbl {
+  font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.btn-dashboard {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 42px; padding: 0 28px; border: none; border-radius: var(--radius-md);
+  background: var(--accent); color: #fff; font-family: var(--font-sans);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+  text-decoration: none; margin-top: 16px;
+  transition: background 0.15s, transform 0.1s;
+}
+.btn-dashboard:hover { background: var(--accent-hover); }
+.btn-dashboard:active { transform: scale(0.98); }
+.btn-dashboard svg { width: 16px; height: 16px; }
+
+.invite-link {
+  display: block; margin-top: 12px; font-size: 13px;
+  color: var(--text-tertiary); cursor: pointer; background: none; border: none;
+  font-family: var(--font-sans); transition: color 0.15s;
+}
+.invite-link:hover { color: var(--text-secondary); }
+
+/* ── Responsive: stack on narrow ── */
+@media (max-width: 900px) {
+  .split { grid-template-columns: 1fr; }
+  .panel-left { display: none; }
+  .panel-right { border-left: none; }
+  .panel-right-body { padding: 0 24px 24px; }
+  .step-viewport { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  .panel-right-body { padding: 0 16px 16px; }
+  .providers { gap: 6px; }
+  .provider-card { padding: 14px 8px; }
+  .provider-card svg { width: 24px; height: 24px; }
+  .stat-cards { gap: 6px; }
+  .chips { gap: 6px; }
+  .chip { padding: 6px 12px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="split">
+
+  <!-- ═══════ LEFT BRANDED PANEL ═══════ -->
+  <div class="panel-left">
+    <div class="brand-logo">
+      <div class="brand-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+        </svg>
+      </div>
+      <div class="brand-logo-text">Zop<span>Night</span></div>
+    </div>
+
+    <!-- Floating quote card -->
+    <div class="brand-quote">
+      <p>"ZopNight cut our monthly cloud bill by 15% in the first week. The resource discovery alone saved our team dozens of hours of manual auditing."</p>
+      <div class="brand-quote-author">
+        <div class="brand-quote-avatar">RS</div>
+        <div>
+          <div class="brand-quote-name">Rajesh Sharma</div>
+          <div class="brand-quote-role">VP Engineering, NutriCorp Global</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom tagline -->
+    <div class="panel-left-content">
+      <h2 class="brand-tagline">
+        One platform to<br><span class="highlight">optimize all your</span><br>cloud costs.
+      </h2>
+      <p class="brand-desc">
+        Discover idle resources, schedule shutdowns, and get AI-powered recommendations — all in one place.
+      </p>
+      <div class="brand-trust">
+        <div class="trust-item">
+          <div class="trust-val">10K+</div>
+          <div class="trust-lbl">Resources Managed</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-val">$4.2M</div>
+          <div class="trust-lbl">Savings Delivered</div>
+        </div>
+        <div class="trust-item">
+          <div class="trust-val">120+</div>
+          <div class="trust-lbl">Teams</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-left-footer">&copy; 2026 zop.dev</div>
+  </div>
+
+  <!-- ═══════ RIGHT FORM PANEL ═══════ -->
+  <div class="panel-right">
+    <div class="progress-bar" id="progressBar" style="width:20%"></div>
+
+    <div class="panel-right-top">
+      Already have an account?&nbsp;<a href="dashboard-preview.html">Sign in</a>
+    </div>
+
+    <div class="panel-right-body">
+
+      <!-- Step dots -->
+      <div class="step-dots" id="stepDots">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+
+      <div class="step-viewport" id="stepViewport">
+
+        <!-- ════════ STEP 1: Welcome ════════ -->
+        <div class="step active" id="step1">
+          <h1>Welcome to ZopNight</h1>
+          <p class="subtitle">Let's set up your cloud cost management in under 2 minutes.</p>
+
+          <button class="sso-btn" type="button" onclick="goStep(2)">
+            <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Continue with Google
+          </button>
+          <button class="sso-btn" type="button" onclick="goStep(2)">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z"/></svg>
+            Continue with GitHub
+          </button>
+
+          <div class="or-divider">or sign in with email</div>
+
+          <div class="field">
+            <label>Full Name</label>
+            <input type="text" id="inpName" placeholder="Jane Smith" autocomplete="name">
+          </div>
+          <div class="field">
+            <label>Work Email</label>
+            <input type="email" id="inpEmail" placeholder="jane@company.com" autocomplete="email">
+          </div>
+          <button class="btn-primary" onclick="goStep(2)">Continue</button>
+        </div>
+
+        <!-- ════════ STEP 2: Organization ════════ -->
+        <div class="step" id="step2">
+          <h1>Set up your organization</h1>
+          <p class="subtitle">Tell us a bit about your company so we can tailor the experience.</p>
+          <div class="field">
+            <label>Organization Name</label>
+            <input type="text" id="inpOrg" placeholder="Acme Corp" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label>Industry</label>
+            <select id="selIndustry">
+              <option value="" disabled selected>Select your industry</option>
+              <option>FMCG</option>
+              <option>SaaS</option>
+              <option>Fintech</option>
+              <option>Healthcare</option>
+              <option>E-commerce</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Monthly Cloud Spend</label>
+            <div class="chips" id="spendChips">
+              <div class="chip" data-val="<10k">&lt; $10K</div>
+              <div class="chip" data-val="10k-50k">$10K – $50K</div>
+              <div class="chip" data-val="50k-200k">$50K – $200K</div>
+              <div class="chip" data-val="200k-1m">$200K – $1M</div>
+              <div class="chip" data-val="1m+">$1M+</div>
+            </div>
+          </div>
+          <button class="btn-primary" onclick="goStep(3)">Continue</button>
+          <button class="back-link" onclick="goStep(1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            Back
+          </button>
+        </div>
+
+        <!-- ════════ STEP 3: Connect Cloud ════════ -->
+        <div class="step" id="step3">
+          <h1>Connect your cloud account</h1>
+          <p class="subtitle">We'll use read-only access to discover your resources and costs.</p>
+
+          <div class="providers">
+            <div class="provider-card" onclick="selectProvider('aws')" id="pcAws">
+              <svg viewBox="0 0 40 40"><path d="M13.7 21.7c0 .4.04.7.1.9.08.2.17.4.3.7.04.06.06.12.06.16 0 .07-.04.14-.14.2l-.45.3c-.07.05-.13.07-.18.07-.07 0-.14-.04-.2-.1-.1-.1-.17-.22-.24-.34-.06-.13-.13-.27-.2-.44-.5.6-1.13.9-1.88.9-.54 0-.96-.15-1.28-.46-.32-.3-.48-.72-.48-1.24 0-.55.2-1 .58-1.34.4-.34.92-.52 1.58-.52.22 0 .45.02.68.05.24.04.48.08.74.15v-.47c0-.5-.1-.84-.3-1.04-.2-.2-.56-.3-1.06-.3-.23 0-.46.03-.7.08-.24.06-.48.13-.7.22-.1.05-.18.07-.22.08-.04.02-.07.02-.1.02-.08 0-.12-.06-.12-.2v-.35c0-.1.02-.18.05-.22.03-.04.1-.08.2-.13.23-.12.5-.22.82-.3.32-.08.66-.13 1.02-.13.78 0 1.35.18 1.72.53.36.35.54.88.54 1.6v2.1zm-2.6 1c.22 0 .44-.04.67-.12.24-.08.44-.23.62-.43.1-.12.18-.26.23-.42.04-.16.07-.35.07-.57v-.28c-.2-.05-.4-.1-.6-.12-.2-.03-.4-.05-.6-.05-.42 0-.73.08-.94.26-.2.18-.3.42-.3.74 0 .3.07.52.23.67.15.16.37.23.66.23zm5.15.73c-.1 0-.17-.02-.22-.06-.05-.04-.1-.13-.13-.24l-1.5-4.93-.02-.12c0-.1.05-.15.14-.15h.57c.1 0 .18.02.23.06.05.04.08.12.12.24l1.07 4.23 1-4.23c.03-.13.06-.2.12-.25.05-.04.14-.06.23-.06h.47c.1 0 .18.02.23.06.05.04.1.13.12.25l1 4.28 1.1-4.28c.04-.13.08-.2.13-.25.05-.04.13-.06.22-.06h.54c.1 0 .15.05.15.15 0 .03 0 .06-.02.1 0 .04-.02.08-.04.13l-1.54 4.93c-.04.12-.08.2-.13.25-.05.04-.13.06-.22.06h-.5c-.1 0-.18-.02-.23-.06s-.1-.13-.12-.26l-.98-4.12-.97 4.1c-.03.14-.07.22-.12.26-.05.05-.14.07-.24.07h-.5zm8.42.12c-.34 0-.67-.04-1-.12-.32-.08-.57-.17-.75-.27-.1-.06-.18-.13-.2-.2-.03-.06-.04-.13-.04-.2v-.36c0-.13.05-.2.14-.2.04 0 .08.02.12.03.04.02.1.05.17.08.23.1.48.2.74.25.28.06.54.1.8.1.43 0 .76-.08.98-.24.23-.16.35-.4.35-.7 0-.2-.07-.37-.2-.52-.13-.14-.38-.27-.74-.4l-1.06-.33c-.54-.17-.94-.42-1.18-.75-.24-.33-.37-.7-.37-1.08 0-.3.07-.58.2-.82.13-.24.3-.45.53-.6.22-.17.48-.3.77-.38.3-.1.6-.14.93-.14.16 0 .33.02.5.04.18.03.34.07.5.1.15.05.3.1.43.15.13.06.23.12.3.18.1.07.18.14.22.22.04.07.06.16.06.27v.33c0 .14-.05.2-.14.2-.05 0-.13-.03-.24-.1-.36-.17-.77-.26-1.22-.26-.38 0-.68.06-.88.2-.2.14-.3.35-.3.64 0 .2.07.38.22.53.15.14.42.28.8.42l1.04.33c.53.17.92.4 1.15.7.23.3.34.65.34 1.03 0 .32-.06.6-.2.85-.13.25-.32.47-.55.64-.24.17-.52.3-.85.4-.34.08-.7.13-1.08.13z" fill="#F90"/><path d="M25.5 27.8c-3.2 2.36-7.84 3.62-11.84 3.62-5.6 0-10.64-2.07-14.45-5.52-.3-.27-.03-.64.33-.43 4.12 2.4 9.2 3.83 14.45 3.83 3.54 0 7.44-.74 11.03-2.26.54-.23 1 .36.47.75z" fill="#F90"/><path d="M26.82 26.28c-.4-.53-2.7-.25-3.73-.13-.3.04-.36-.23-.08-.43 1.83-1.28 4.82-.92 5.17-.48.35.43-.1 3.46-1.8 4.9-.26.23-.52.1-.4-.17.38-.96 1.24-3.14.84-3.68z" fill="#F90"/></svg>
+              <div class="pname">AWS</div>
+            </div>
+            <div class="provider-card" onclick="selectProvider('gcp')" id="pcGcp">
+              <svg viewBox="0 0 40 40"><path d="M25.56 16.85l2.05-2.05.14-.87A11.94 11.94 0 0 0 8.16 18.3l.72-.1 4.1-.67s.2-.35.32-.33a7.82 7.82 0 0 1 12.26-.35z" fill="#EA4335"/><path d="M31.36 18.3a12 12 0 0 0-3.62-5.83l-2.88 2.88a7.83 7.83 0 0 1 2.87 6.21v.78a3.92 3.92 0 0 1 0 7.83h-7.83l-.78.79v4.7l.78.78h7.83a8.03 8.03 0 0 0 3.63-15.14z" fill="#4285F4"/><path d="M12.1 36.44h7.83v-5.27H12.1a3.88 3.88 0 0 1-1.62-.36l-1.13.35-2.05 2.05-.28 1.1a8 8 0 0 0 5.07 2.13z" fill="#34A853"/><path d="M12.1 20.5a8.03 8.03 0 0 0-5.08 14.22l3.46-3.46a3.92 3.92 0 1 1 5.18-5.18l3.46-3.46A8.02 8.02 0 0 0 12.1 20.5z" fill="#FBBC05"/></svg>
+              <div class="pname">GCP</div>
+            </div>
+            <div class="provider-card" onclick="selectProvider('azure')" id="pcAzure">
+              <svg viewBox="0 0 40 40"><path d="M17.09 6.07L8.24 22.24l5.18 9.22h-6.5L3 34.75h18.93L17.1 6.07z" fill="#0089D6"/><path d="M22.34 10.22L17.08 20.6l6.97 12.62L37 34.75H22.62l-5.54-12.5 5.26-12.03z" fill="#0089D6"/></svg>
+              <div class="pname">Azure</div>
+            </div>
+          </div>
+
+          <!-- AWS form -->
+          <div class="provider-form" id="formAws">
+            <div class="inner-card">
+              <div class="field" style="margin-bottom:12px">
+                <label>AWS Account ID</label>
+                <input type="text" placeholder="123456789012">
+              </div>
+              <div class="field" style="margin-bottom:12px">
+                <label>External ID</label>
+                <input type="text" placeholder="Auto-generated" value="zn-ext-a7f3b9c2" readonly style="color:var(--text-tertiary)">
+              </div>
+              <button class="btn-cf" onclick="goStep(4)">Launch CloudFormation Stack</button>
+            </div>
+          </div>
+
+          <!-- GCP form -->
+          <div class="provider-form" id="formGcp">
+            <div class="inner-card">
+              <div class="field" style="margin-bottom:12px">
+                <label>GCP Project ID</label>
+                <input type="text" placeholder="my-project-123456">
+              </div>
+              <div class="field" style="margin-bottom:0">
+                <label>Service Account Key (JSON)</label>
+                <div class="upload-area" onclick="goStep(4)">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                  Drop JSON file or click to upload
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Azure form -->
+          <div class="provider-form" id="formAzure">
+            <div class="inner-card">
+              <div class="field" style="margin-bottom:12px">
+                <label>Subscription ID</label>
+                <input type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+              </div>
+              <div class="field" style="margin-bottom:12px">
+                <label>Tenant ID</label>
+                <input type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+              </div>
+              <button class="btn-primary" style="height:38px;font-size:13px;margin-top:0" onclick="goStep(4)">Connect Azure Account</button>
+            </div>
+          </div>
+
+          <div style="text-align:center;margin-top:8px">
+            <button class="btn-ghost" onclick="goStep(4)">Skip for now</button>
+          </div>
+          <button class="back-link" onclick="goStep(2)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            Back
+          </button>
+        </div>
+
+        <!-- ════════ STEP 4: Syncing ════════ -->
+        <div class="step" id="step4">
+          <div class="sync-center">
+            <div class="sync-spinner" id="syncSpinner"></div>
+            <div class="sync-counter" id="syncCounter">0</div>
+            <div class="sync-label">resources discovered</div>
+            <div class="service-grid" id="svcGrid"></div>
+            <p class="sync-subtitle">This usually takes a few seconds</p>
+          </div>
+          <button class="back-link" onclick="goStep(3);stopSync()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            Back
+          </button>
+        </div>
+
+        <!-- ════════ STEP 5: You're all set ════════ -->
+        <div class="step" id="step5">
+          <div class="ready-center">
+            <div class="ready-check">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h1 style="margin-bottom:4px">You're all set!</h1>
+            <p class="subtitle" style="margin-bottom:0">Your cloud infrastructure is connected and ready to optimize.</p>
+
+            <div class="stat-cards">
+              <div class="stat-card">
+                <div class="stat-val" style="color:var(--accent)">10,400</div>
+                <div class="stat-lbl">Resources</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-val">$2.8M</div>
+                <div class="stat-lbl">Monthly Spend</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-val" style="color:var(--success)">~$420K</div>
+                <div class="stat-lbl">Potential Savings</div>
+              </div>
+            </div>
+
+            <a href="dashboard-preview.html" class="btn-dashboard">
+              Go to Dashboard
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <button class="invite-link">Invite your team &rarr;</button>
+          </div>
+        </div>
+
+      </div><!-- /step-viewport -->
+    </div><!-- /panel-right-body -->
+  </div><!-- /panel-right -->
+
+</div><!-- /split -->
+
+<script>
+let currentStep = 1;
+let selectedSpend = null;
+let selectedProvider = null;
+let syncRAF = null;
+let syncInterval = null;
+
+const TOTAL_STEPS = 5;
+const SERVICES = [
+  {name:'EC2',color:'#f97316'},{name:'S3',color:'#22c55e'},{name:'RDS',color:'#3b82f6'},
+  {name:'Lambda',color:'#a855f7'},{name:'EKS',color:'#0891b2'},{name:'CloudFront',color:'#eab308'},
+  {name:'DynamoDB',color:'#3b82f6'},{name:'ElastiCache',color:'#ef4444'},{name:'SQS',color:'#f97316'},
+  {name:'SNS',color:'#ec4899'},{name:'ECS',color:'#0891b2'},{name:'Route 53',color:'#a855f7'},
+  {name:'CloudWatch',color:'#ef4444'},{name:'IAM',color:'#eab308'},{name:'VPC',color:'#22c55e'},
+  {name:'EBS',color:'#3b82f6'},
+];
+
+/* ── Step dots ── */
+function updateDots(n) {
+  const dots = document.querySelectorAll('.step-dot');
+  dots.forEach((d, i) => {
+    d.className = 'step-dot';
+    if (i < n - 1) d.classList.add('done');
+    if (i === n - 1) d.classList.add('active');
+  });
+}
+
+/* ── Step navigation ── */
+function goStep(n) {
+  if (n === currentStep) return;
+  const prev = document.getElementById('step' + currentStep);
+  const next = document.getElementById('step' + n);
+  if (!prev || !next) return;
+
+  const goingForward = n > currentStep;
+
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const s = document.getElementById('step' + i);
+    if (i !== n) {
+      s.classList.remove('active');
+      s.style.position = 'absolute';
+      s.style.opacity = '0';
+      s.style.pointerEvents = 'none';
+      s.style.transform = i < n ? 'translateX(-40px)' : 'translateX(40px)';
+      setTimeout(() => { s.style.visibility = 'hidden'; }, 400);
+    }
+  }
+
+  next.style.visibility = 'visible';
+  next.style.position = 'relative';
+  next.style.pointerEvents = 'auto';
+  next.style.transform = goingForward ? 'translateX(40px)' : 'translateX(-40px)';
+  next.style.opacity = '0';
+
+  void next.offsetWidth;
+  next.classList.add('active');
+  next.style.transform = 'translateX(0)';
+  next.style.opacity = '1';
+
+  currentStep = n;
+  updateDots(n);
+  document.getElementById('progressBar').style.width = (n / TOTAL_STEPS * 100) + '%';
+
+  // Scroll form area to top
+  document.querySelector('.panel-right-body').scrollTop = 0;
+
+  setTimeout(() => {
+    const inp = next.querySelector('input:not([readonly])');
+    if (inp) inp.focus();
+  }, 450);
+
+  if (n === 4) startSync();
+}
+
+/* ── Chips ── */
+document.getElementById('spendChips').addEventListener('click', function(e) {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  this.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  chip.classList.add('selected');
+  selectedSpend = chip.dataset.val;
+});
+
+/* ── Provider selector ── */
+function selectProvider(p) {
+  selectedProvider = p;
+  ['aws','gcp','azure'].forEach(id => {
+    document.getElementById('pc' + id.charAt(0).toUpperCase() + id.slice(1)).classList.toggle('selected', id === p);
+    document.getElementById('form' + id.charAt(0).toUpperCase() + id.slice(1)).classList.toggle('open', id === p);
+  });
+}
+
+/* ── Sync animation ── */
+function startSync() {
+  stopSync();
+  const counter = document.getElementById('syncCounter');
+  const grid = document.getElementById('svcGrid');
+  const target = 10400;
+  const duration = 3000;
+  const startTime = Date.now();
+
+  grid.innerHTML = '';
+  SERVICES.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'svc-chip';
+    el.innerHTML = '<span class="dot" style="background:' + s.color + '"></span>' + s.name;
+    grid.appendChild(el);
+  });
+
+  const chips = grid.querySelectorAll('.svc-chip');
+  const chipInterval = duration / chips.length;
+  chips.forEach((chip, i) => {
+    setTimeout(() => chip.classList.add('visible'), 400 + i * chipInterval);
+  });
+
+  document.getElementById('syncSpinner').style.opacity = '1';
+
+  syncInterval = setInterval(() => {
+    const elapsed = Date.now() - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    counter.textContent = Math.round(eased * target).toLocaleString();
+
+    if (progress >= 1) {
+      clearInterval(syncInterval); syncInterval = null;
+      counter.textContent = target.toLocaleString();
+      document.getElementById('syncSpinner').style.opacity = '0';
+      setTimeout(() => goStep(5), 800);
+    }
+  }, 30);
+}
+
+function stopSync() {
+  if (syncInterval) { clearInterval(syncInterval); syncInterval = null; }
+  if (syncRAF) { cancelAnimationFrame(syncRAF); syncRAF = null; }
+}
+
+/* ── Keyboard ── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && currentStep < 4) {
+    e.preventDefault();
+    goStep(currentStep + 1);
+  }
+});
+
+/* ── Init ── */
+document.getElementById('inpName').focus();
+</script>
+</body>
+</html>
