@@ -155,6 +155,79 @@ body.sidebar-collapsed .page-root{margin-left:52px;}
 .sidebar-nav-scroll::-webkit-scrollbar-track { background: transparent; }
 .sidebar-nav-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 4px; }
 .sidebar-nav-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: FOCUS RING (Accessibility)
+   ═══════════════════════════════════════════════════════════ */
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+*:focus:not(:focus-visible) { outline: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: BUTTON LOADING STATES
+   ═══════════════════════════════════════════════════════════ */
+.btn.is-loading { pointer-events: none; opacity: 0.7; position: relative; color: transparent !important; }
+.btn.is-loading::after {
+  content: ''; position: absolute; width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.25); border-top-color: #fff;
+  border-radius: 50%; animation: btn-spin 0.6s linear infinite;
+}
+.btn-primary.is-loading::after { border-color: rgba(0,0,0,0.2); border-top-color: #000; }
+@keyframes btn-spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: NOTIFICATION BADGE PULSE
+   ═══════════════════════════════════════════════════════════ */
+.notif-badge { animation: badge-pulse 2s ease-in-out infinite; }
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+  50% { transform: scale(1.1); box-shadow: 0 0 0 4px rgba(239,68,68,0); }
+}
+.notif-badge:empty { display: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: BREADCRUMB BAR
+   ═══════════════════════════════════════════════════════════ */
+.phase1-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px;
+  border-bottom: 0.5px solid var(--border-default);
+  font-size: 12px; color: var(--text-tertiary);
+  background: var(--bg-page);
+}
+.phase1-breadcrumb a { color: var(--text-tertiary); text-decoration: none; transition: color 150ms; }
+.phase1-breadcrumb a:hover { color: var(--text-secondary); }
+.phase1-breadcrumb .bc-sep { color: var(--text-disabled); font-size: 10px; }
+.phase1-breadcrumb .bc-current { color: var(--text-secondary); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: ROW DENSITY TOGGLE
+   ═══════════════════════════════════════════════════════════ */
+.density-compact { --row-height: 32px; font-size: 12px; }
+.density-comfortable { --row-height: 44px; }
+.density-spacious { --row-height: 56px; }
+.density-toggle {
+  display: inline-flex; align-items: center; height: 26px;
+  border: 0.5px solid var(--border-default); border-radius: var(--radius-md);
+  overflow: hidden; margin-left: auto;
+}
+.density-toggle button {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 26px; color: var(--text-tertiary);
+  transition: background 120ms, color 120ms;
+}
+.density-toggle button:hover { background: var(--bg-hover); color: var(--text-secondary); }
+.density-toggle button.active { background: var(--accent-bg); color: var(--accent); }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: SPARKLINES
+   ═══════════════════════════════════════════════════════════ */
+.sparkline { display: inline-block; vertical-align: middle; }
+.sparkline polyline { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.sparkline .spark-up { stroke: var(--running-color); }
+.sparkline .spark-down { stroke: var(--error-color); }
+.sparkline .spark-flat { stroke: var(--text-tertiary); }
+.sparkline .spark-area { opacity: 0.08; }
+.density-toggle button + button { border-left: 0.5px solid var(--border-default); }
 .sidebar-nav-scroll { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
 .sidebar-mode-toggle { width: 30px; height: 17px; border-radius: 9px; cursor: pointer; position: relative; flex-shrink: 0; background: var(--bg-active); border: 0.5px solid var(--border-default); transition: background 200ms; }
 .sidebar-mode-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 11px; height: 11px; border-radius: 50%; background: var(--text-secondary); transition: transform 200ms; }
@@ -551,7 +624,7 @@ tbody tr {
         <svg class="pi-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4.5 12.75l6 6 9-13.5"/></svg>
       </div>
       <div class="sidebar-product-item disabled">
-        <div class="pi-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">ZD</div>
+        <div class="pi-icon" style="background:linear-gradient(135deg,#f59e0b,var(--warning-color))">ZD</div>
         <div class="pi-info"><div class="pi-name">ZopDay</div><div class="pi-desc">Cloud Operations</div></div>
         <span class="pi-badge">Soon</span>
       </div>
@@ -770,6 +843,14 @@ tbody tr {
         <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z"/><path d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z"/></svg>
         Export
       </button>
+    </div>
+    <!-- PHASE 1: BREADCRUMB -->
+    <div class="phase1-breadcrumb">
+      <a href="dashboard-preview.html">Home</a>
+      <span class="bc-sep">›</span>
+      <span>Cost Management</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">Reports</span>
     </div>
     <div class="toolbar" style="height:auto;padding:0 14px;">
       <div class="report-tabs" style="border-bottom:none;margin-bottom:0;flex:1;">
@@ -2039,6 +2120,26 @@ document.addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&e.key
     applySliderPhysics();
   }).observe(document.body, { childList: true, subtree: true });
 
+})();
+
+
+/* PHASE 1: Row Density */
+function setDensity(mode, btn) {
+  const pc = document.getElementById('pageCard');
+  if (!pc) return;
+  pc.classList.remove('density-compact','density-comfortable','density-spacious');
+  pc.classList.add('density-' + mode);
+  document.querySelectorAll('.density-toggle button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  localStorage.setItem('zn-density', mode);
+}
+(function(){
+  var saved = localStorage.getItem('zn-density');
+  if (saved) {
+    var pc = document.getElementById('pageCard');
+    if (pc) { pc.classList.remove('density-compact','density-comfortable','density-spacious'); pc.classList.add('density-' + saved); }
+    setTimeout(function(){ var btns = document.querySelectorAll('.density-toggle button'); btns.forEach(function(b){ if(b.getAttribute('data-density')===saved) b.classList.add('active'); }); }, 0);
+  }
 })();
 
 </script>

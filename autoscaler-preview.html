@@ -109,6 +109,79 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.10);border-radius:3px;}
 ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.18);}
 
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: FOCUS RING (Accessibility)
+   ═══════════════════════════════════════════════════════════ */
+*:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+*:focus:not(:focus-visible) { outline: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: BUTTON LOADING STATES
+   ═══════════════════════════════════════════════════════════ */
+.btn.is-loading { pointer-events: none; opacity: 0.7; position: relative; color: transparent !important; }
+.btn.is-loading::after {
+  content: ''; position: absolute; width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.25); border-top-color: #fff;
+  border-radius: 50%; animation: btn-spin 0.6s linear infinite;
+}
+.btn-primary.is-loading::after { border-color: rgba(0,0,0,0.2); border-top-color: #000; }
+@keyframes btn-spin { to { transform: rotate(360deg); } }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: NOTIFICATION BADGE PULSE
+   ═══════════════════════════════════════════════════════════ */
+.notif-badge { animation: badge-pulse 2s ease-in-out infinite; }
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+  50% { transform: scale(1.1); box-shadow: 0 0 0 4px rgba(239,68,68,0); }
+}
+.notif-badge:empty { display: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: BREADCRUMB BAR
+   ═══════════════════════════════════════════════════════════ */
+.phase1-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 14px;
+  border-bottom: 0.5px solid var(--border-default);
+  font-size: 12px; color: var(--text-tertiary);
+  background: var(--bg-page);
+}
+.phase1-breadcrumb a { color: var(--text-tertiary); text-decoration: none; transition: color 150ms; }
+.phase1-breadcrumb a:hover { color: var(--text-secondary); }
+.phase1-breadcrumb .bc-sep { color: var(--text-disabled); font-size: 10px; }
+.phase1-breadcrumb .bc-current { color: var(--text-secondary); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: ROW DENSITY TOGGLE
+   ═══════════════════════════════════════════════════════════ */
+.density-compact { --row-height: 32px; font-size: 12px; }
+.density-comfortable { --row-height: 44px; }
+.density-spacious { --row-height: 56px; }
+.density-toggle {
+  display: inline-flex; align-items: center; height: 26px;
+  border: 0.5px solid var(--border-default); border-radius: var(--radius-md);
+  overflow: hidden; margin-left: auto;
+}
+.density-toggle button {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 26px; color: var(--text-tertiary);
+  transition: background 120ms, color 120ms;
+}
+.density-toggle button:hover { background: var(--bg-hover); color: var(--text-secondary); }
+.density-toggle button.active { background: var(--accent-bg); color: var(--accent); }
+
+/* ═══════════════════════════════════════════════════════════
+   PHASE 1: SPARKLINES
+   ═══════════════════════════════════════════════════════════ */
+.sparkline { display: inline-block; vertical-align: middle; }
+.sparkline polyline { fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.sparkline .spark-up { stroke: var(--running-color); }
+.sparkline .spark-down { stroke: var(--error-color); }
+.sparkline .spark-flat { stroke: var(--text-tertiary); }
+.sparkline .spark-area { opacity: 0.08; }
+.density-toggle button + button { border-left: 0.5px solid var(--border-default); }
+
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:28px;padding:0 12px;font-size:13px;font-weight:500;border-radius:var(--radius-md);transition:background 150ms,border-color 150ms;font-family:var(--font-sans);}
 .btn-primary{background:#fff;color:#000;}
 .btn-secondary{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.80);border:0.5px solid rgba(255,255,255,0.12);}
@@ -417,7 +490,7 @@ tbody tr {
         <svg class="pi-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4.5 12.75l6 6 9-13.5"/></svg>
       </div>
       <div class="sidebar-product-item disabled">
-        <div class="pi-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">ZD</div>
+        <div class="pi-icon" style="background:linear-gradient(135deg,#f59e0b,var(--warning-color))">ZD</div>
         <div class="pi-info"><div class="pi-name">ZopDay</div><div class="pi-desc">Cloud Operations</div></div>
         <span class="pi-badge">Soon</span>
       </div>
@@ -557,12 +630,25 @@ tbody tr {
         Create Rule
       </button>
     </div>
+    <!-- PHASE 1: BREADCRUMB -->
+    <div class="phase1-breadcrumb">
+      <a href="dashboard-preview.html">Home</a>
+      <span class="bc-sep">›</span>
+      <span>Optimization</span>
+      <span class="bc-sep">›</span>
+      <span class="bc-current">AutoScaler</span>
+    </div>
 
     <!-- TABS -->
     <div class="toolbar" style="padding:0">
       <button class="tab-btn active" onclick="switchTab(this,'rules')">Scaling Rules</button>
       <button class="tab-btn" onclick="switchTab(this,'activity')">Activity Log</button>
       <button class="tab-btn" onclick="switchTab(this,'impact')">Cost Impact</button>
+          <div class="density-toggle" data-tip="Row density" data-tip-pos="bottom">
+        <button data-density="compact" onclick="setDensity('compact',this)" title="Compact"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 10h18M3 14h18M3 18h18"/></svg></button>
+        <button data-density="comfortable" class="active" onclick="setDensity('comfortable',this)" title="Comfortable"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M3 12h18M3 19h18"/></svg></button>
+        <button data-density="spacious" onclick="setDensity('spacious',this)" title="Spacious"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h18M3 12h18M3 20h18"/></svg></button>
+      </div>
     </div>
 
     <div class="page-content">
@@ -1124,6 +1210,40 @@ document.addEventListener('keydown',function(e){if((e.metaKey||e.ctrlKey)&&e.key
     applySliderPhysics();
   }).observe(document.body, { childList: true, subtree: true });
 
+})();
+
+
+/* PHASE 1: Sparkline helper */
+function makeSparkline(seed, w, h) {
+  w = w || 48; h = h || 18;
+  var pts = [], v = 10 + (seed * 7) % 8;
+  for (var i = 0; i < 7; i++) {
+    v += ((seed * (i+3) * 13) % 7) - 3;
+    if (v < 2) v = 2; if (v > h-2) v = h-2;
+    pts.push((i * w/6).toFixed(1) + ',' + v.toFixed(1));
+  }
+  var trend = parseFloat(pts[6].split(',')[1]) < parseFloat(pts[0].split(',')[1]) ? 'spark-up' : 'spark-down';
+  if (Math.abs(parseFloat(pts[6].split(',')[1]) - parseFloat(pts[0].split(',')[1])) < 2) trend = 'spark-flat';
+  return '<svg class="sparkline" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'"><polyline class="'+trend+'" points="'+pts.join(' ')+'"/></svg>';
+}
+
+/* PHASE 1: Row Density */
+function setDensity(mode, btn) {
+  const pc = document.getElementById('pageCard');
+  if (!pc) return;
+  pc.classList.remove('density-compact','density-comfortable','density-spacious');
+  pc.classList.add('density-' + mode);
+  document.querySelectorAll('.density-toggle button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  localStorage.setItem('zn-density', mode);
+}
+(function(){
+  var saved = localStorage.getItem('zn-density');
+  if (saved) {
+    var pc = document.getElementById('pageCard');
+    if (pc) { pc.classList.remove('density-compact','density-comfortable','density-spacious'); pc.classList.add('density-' + saved); }
+    setTimeout(function(){ var btns = document.querySelectorAll('.density-toggle button'); btns.forEach(function(b){ if(b.getAttribute('data-density')===saved) b.classList.add('active'); }); }, 0);
+  }
 })();
 
 </script>
